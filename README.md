@@ -1,71 +1,74 @@
+# DKKD Checker - Vietnamese company information checking for PHP/Laravel
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/ohmygodvt95/dkkd-checker.svg?style=flat-square)](https://packagist.org/packages/ohmygodvt95/dkkd-checker)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/ohmygodvt95/dkkd-checker/run-tests?label=tests)](https://github.com/ohmygodvt95/dkkd-checker/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/ohmygodvt95/dkkd-checker/Fix%20PHP%20code%20style%20issues?label=code%20style)](https://github.com/ohmygodvt95/dkkd-checker/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/ohmygodvt95/dkkd-checker.svg?style=flat-square)](https://packagist.org/packages/ohmygodvt95/dkkd-checker)
 
-# :package_description
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/:vendor_slug/:package_slug/run-tests?label=tests)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/:vendor_slug/:package_slug/Fix%20PHP%20code%20style%20issues?label=code%20style)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
-
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+Use keywords to search for company registered information on government portal.
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
+composer require ohmygodvt95/dkkd-checker
 ```
 
-You can publish and run the migrations with:
+Optionally, you can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-config"
+php artisan vendor:publish --tag="dkkd-checker-config"
 ```
 
 This is the contents of the published config file:
 
 ```php
+<?php
+
+// config for Ohmygodvt95/DKKDChecker
 return [
+    'token' => [
+        'endpoint' => 'https://dichvuthongtin.dkkd.gov.vn/inf/default.aspx',
+        'regex' =>  '/id=\"ctl00_hdParameter\".+value=\"([a-zA-Z0-9\-]+)\"/m'
+    ],
+    'search' => [
+        'endpoint' => 'https://dichvuthongtin.dkkd.gov.vn/inf/Public/Srv.aspx/GetSearch'
+    ]
 ];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag=":package_slug-views"
 ```
 
 ## Usage
 
 ```php
-$variable = new VendorName\Skeleton();
-echo $variable->echoPhrase('Hello, VendorName!');
+use Ohmygodvt95\DKKDChecker\DKKDChecker;
+
+var_dump(DKKDChecker::search('0101659906'));
+
+/** 
+// result
+
+array:3 [
+    0 => array:14 [
+        "__type" => "Inf.BusinessLayer.BusinessEntities.ApacheSolr.Enterprise"
+        "Id" => "540179"
+        "Name" => "CÔNG TY CỔ PHẦN GMO-Z.COM RUNSYSTEM"
+        "Name_F" => "GMO-Z.COM RUNSYSTEM JOINT STOCK COMPANY"
+        "Short_Name" => ""
+        "Enterprise_Code" => "0005768616"
+        "Enterprise_Gdt_Code" => "0101659906"
+        "Status" => null
+        "City_Id" => "81"
+        "District_Id" => "1035"
+        "Ward_Id" => "12068"
+        "Ho_Address" => "Tầng 6, Tòa nhà Ocean Park, Số 01 Đào Duy Anh, Phường Phương Mai, Quận Đống Đa, Thành phố Hà Nội, Việt Nam"
+        "Ho_Address_F" => "Tầng 6, Tòa nhà Ocean Park, Số 01 Đào Duy Anh, Phường Phương Mai, Quận Đống Đa, Hà Nội, Vietnam"
+        "Legal_First_Name" => "NGÔ VĂN TẨU"
+    ],
+    .....
+]
+ */
 ```
 
 ## Testing
@@ -88,7 +91,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [ThienLV](https://github.com/ohmygodvt95)
 - [All Contributors](../../contributors)
 
 ## License
